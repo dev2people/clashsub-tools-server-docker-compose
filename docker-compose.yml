@@ -1,0 +1,9 @@
+services:
+  sub-converter:
+    image: dev2people/clashsub-tools-server
+    restart: unless-stopped
+    ports:
+      - "80:8189"
+    volumes:
+      - "./data:/workdir/data"
+      - "./config:/workdir/config"
