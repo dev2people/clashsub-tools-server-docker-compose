@@ -1,5 +1,9 @@
 # clash 订阅工具
 
+## 更新日志
+
+[更新日志](ReleaseNote.md)
+
 ## 说明
 
 1. 本项目仅供学习参考，请勿用于非法用途。
@@ -38,8 +42,17 @@ docker-compose up -d
 
 可以本地部署内网直接使用，如果发布到公网需要部署nginx/caddy配置好ssl证书保证没有中间人攻击。
 
-## JS脚本格式
+## 升级方式
+```bash
+cd clashsub-tools-server-docker-compose
+docker-compose pull
+docker-compose down
+docker-compose up -d
+```
 
+
+## JS脚本格式
+有几套默认模板可以使用，也可以自定义。
 ````javascript
 /**主方法 */
 function main(configJsonStr) {
