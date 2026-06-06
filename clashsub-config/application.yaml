@@ -1,0 +1,80 @@
+quarkus:
+  http:
+    host: 0.0.0.0
+    test-port: 8188
+    cors:
+      origins: "*"
+    port: 8189
+  tls:
+    trust-all: true
+  log:
+    file:
+      enable: true
+      rotation:
+        file-suffix: .yyyy-MM-dd
+        max-backup-index: 5
+      path: ./logs/sub-converter.log
+      format: '%d{yyyy-MM-dd HH:mm:ss,SSS} %h %N[%i] %-5p [%c{3.}] (%t) %s%e%n'
+    level: INFO
+    category:
+      "io.quarkus.smallrye.jwt.runtime.auth.MpJwtValidator":
+        level: TRACE
+        min-level: TRACE
+  datasource:
+    # h2
+    #    db-version: 2.1.0
+    db-kind: h2
+    jdbc:
+      max-size: 32
+      min-size: 8
+      url: jdbc:h2:tcp://h2-server:1521/mydb
+      username: sa
+      background-validation-interval: 1M
+      validation-query-sql: SELECT 1
+  hibernate-orm:
+    log:
+      jdbc-warnings: true
+      sql: true
+    physical-naming-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+    schema-management:
+      strategy: update
+    database:
+      version-check:
+        enabled: false
+  quinoa:
+    package-manager: npm
+    dev-server:
+      port: 5173
+    package-manager-install:
+      node-version: 20.10.0
+      ~: true
+    enable-spa-routing: true
+    ui-root-path: /
+    package-manager-command:
+      dev: run dev
+  smallrye-jwt:
+    enabled: true
+  native:
+    resources:
+      includes: data/publicKey.ec.pem,test/js/**,test/yaml/**,*.html,META-INF/resources/**
+mp:
+  jwt:
+    verify:
+      publickey:
+        location: data/publicKey.ec.pem
+        # 新增或修改 algorithm 字段
+        algorithm: ES256
+      issuer: d2p
+smallrye:
+  jwt:
+    sign:
+      key:
+        location: data/privateKey.ec.pem
+      # 明确指定生成 JWT 时使用的算法
+      new-token:
+        signature-algorithm: ES256
+system:
+  init:
+    user:
+      name: admin
+      password: 123456

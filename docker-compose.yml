@@ -1,9 +1,36 @@
 services:
   sub-converter:
-    image: dev2people/clashsub-tools-server
+    # 重启策略
     restart: unless-stopped
+    image: dev2people/clashsub-tools-v1-server-native
     ports:
       - "29081:8189"
     volumes:
-      - "./data:/workdir/data"
-      - "./config:/workdir/config"
+      - "./clashsub-data:/workdir/data"
+      - "./clashsub-config:/workdir/config"
+  h2-server:
+    # 重启策略
+    restart: unless-stopped
+    # 使用一个维护较好的社区 H2 Server 镜像
+    # 例如：oscarfonts/h2 或 thomseno/h2
+    image: oscarfonts/h2:latest
+    container_name: h2_database
+    # 暴露端口：
+    # 1521: H2 数据库的 TCP 连接端口，用于你的 Quarkus 应用连接
+    # 81: H2 Web Console 的端口，用于浏览器访问数据库管理界面
+    #    ports:
+    #      - "31521:1521"
+    #      - "3381:81"
+    environment:
+      - H2_OPTIONS=-ifNotExists
+    # 挂载数据卷，实现数据持久化（即使容器重启数据也不会丢失）
+    volumes:
+      - ./h2-data:/opt/h2-data # 挂载到容器内 H2 存储数据的目录
+  # 通过http://clash-speedtest:8080/speedtest_append_name访问测速服务,过滤掉超时的节点
+  clash-speedtest:
+    restart: unless-stopped
+    image: dev2people/clashsub-tools-clashspeedtest-v0
+    # ports:
+    #   - 18080:8080
+    environment:
+      - AUTH_KEY=sdhadhasdkjhbwe323498bdfsd9873r3yhasdbedfh9321r

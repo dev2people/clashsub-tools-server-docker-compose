@@ -78,3 +78,5 @@ function main(configJsonStr) {
 ![脚本管理](./sys-img/script.png)
 订阅管理
 ![订阅管理](./sys-img/sub.png)
+展示订阅生成路径
+![订阅生成路径](./sys-img/sub-gen-path-image.png)
